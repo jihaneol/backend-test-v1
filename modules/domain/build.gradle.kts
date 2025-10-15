@@ -1,3 +1,7 @@
+plugins {
+    kotlin("jvm")
+
+}
 tasks.jar {
     enabled = true
 }
@@ -5,4 +9,12 @@ tasks.jar {
 dependencies {
     // 이곳에는 절대로 다른 의존성이 포함되어선 안됨.
     // 단, 테스트 코드를 위한 테스팅 라이브러리는 가능.
+    implementation(kotlin("stdlib-jdk8"))
+
+}
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvmToolchain(21)
 }

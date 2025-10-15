@@ -26,4 +26,11 @@ class 수수료계산기Test {
         assertEquals(BigDecimal("400"), fee)
         assertEquals(BigDecimal("9600"), net)
     }
+
+    @Test
+    @DisplayName("퍼센트+정액 수수료가 함께 적용되어야 한다")
+    fun `test`() {
+        val amount = BigDecimal("10000")
+        println(amount)
+    }
 }

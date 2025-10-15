@@ -1,3 +1,6 @@
+plugins {
+    kotlin("jvm")
+}
 tasks.jar {
     enabled = false
 }
@@ -13,10 +16,21 @@ dependencies {
     implementation(projects.modules.external.pgClient)
     implementation(libs.spring.boot.starter.jpa)
     implementation(libs.bundles.bootstrap)
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+
+    runtimeOnly("com.h2database:h2")
+
     testImplementation(libs.bundles.test)
     testImplementation(libs.spring.boot.starter.test) {
         exclude(module = "mockito-core")
     }
     testImplementation(libs.spring.mockk)
     testImplementation(libs.database.h2)
+    implementation(kotlin("stdlib-jdk8"))
+}
+repositories {
+    mavenCentral()
+}
+kotlin {
+    jvmToolchain(21)
 }

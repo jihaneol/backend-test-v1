@@ -11,6 +11,7 @@ import im.bigs.pg.domain.calculation.FeeCalculator
 import im.bigs.pg.domain.payment.Payment
 import im.bigs.pg.domain.payment.PaymentStatus
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 
 /**
  * 결제 생성 유스케이스 구현체.
@@ -46,15 +47,21 @@ class PaymentService(
                 productName = command.productName,
             ),
         )
-        val hardcodedRate = java.math.BigDecimal("0.0300")
-        val hardcodedFixed = java.math.BigDecimal("100")
-        val (fee, net) = FeeCalculator.calculateFee(command.amount, hardcodedRate, hardcodedFixed)
+
+        val policy = feePolicyRepository.findEffectivePolicy(partner.id)
+
+        val (curRate, curFee, curNet) = policy?.let { p ->
+            val (fee, net) = FeeCalculator.calculateFee(command.amount, p.percentage, p.fixedFee)
+            Triple(p.percentage, fee, net)
+         } ?: Triple(BigDecimal.ZERO, BigDecimal.ZERO, command.amount)
+
+
         val payment = Payment(
             partnerId = partner.id,
             amount = command.amount,
-            appliedFeeRate = hardcodedRate,
-            feeAmount = fee,
-            netAmount = net,
+            appliedFeeRate = curRate,
+            feeAmount = curFee,
+            netAmount = curNet,
             cardBin = command.cardBin,
             cardLast4 = command.cardLast4,
             approvalCode = approve.approvalCode,

@@ -10,9 +10,9 @@ tasks.bootJar {
 }
 
 dependencies {
+    implementation(projects.modules.common)
     implementation(projects.modules.application)
     implementation(projects.modules.domain)
-    implementation(libs.spring.boot.starter.web)
     implementation(kotlin("stdlib-jdk8"))
     // WebClient
     implementation("org.springframework.boot:spring-boot-starter-webflux")

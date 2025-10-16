@@ -1,6 +1,5 @@
 package im.bigs.pg.external.pg
 
-import com.sun.org.slf4j.internal.LoggerFactory
 import io.netty.channel.ChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
@@ -17,6 +16,7 @@ import java.time.Duration
 
 @Configuration
 class WebClientConfig {
+    private val log = org.slf4j.LoggerFactory.getLogger(javaClass)
     private val BASE_URL = "https://api-test-pg.bigs.im"
 
     @Bean
@@ -44,13 +44,11 @@ class WebClientConfig {
         ExchangeFilterFunction.ofRequestProcessor { req ->
             val masked = req.headers().toSingleValueMap()
                 .mapValues { (k, v) -> if (k.equals(HttpHeaders.AUTHORIZATION, true)) "***" else v }
-            LoggerFactory.getLogger("WebClientLog" as Class<*>?)
-                .debug(" {} {} headers={}", req.method(), req.url(), masked)
+                log.debug(" {} {} headers={}", req.method(), req.url(), masked)
             Mono.just(req)
         }.andThen(
             ExchangeFilterFunction.ofResponseProcessor { res ->
-                LoggerFactory.getLogger("WebClientLog" as Class<*>?)
-                    .debug(" status={} headers={}", res.statusCode(), res.headers().asHttpHeaders())
+                    log.debug(" status={} headers={}", res.statusCode(), res.headers().asHttpHeaders())
                 Mono.just(res)
             }
         )

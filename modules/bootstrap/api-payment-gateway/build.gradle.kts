@@ -10,13 +10,14 @@ tasks.bootJar {
 }
 
 dependencies {
+    implementation(projects.modules.common)
     implementation(projects.modules.domain)
     implementation(projects.modules.application)
     implementation(projects.modules.infrastructure.persistence)
     implementation(projects.modules.external.pgClient)
     implementation(libs.spring.boot.starter.jpa)
     implementation(libs.bundles.bootstrap)
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.5.0")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
 
     runtimeOnly("com.h2database:h2")
 

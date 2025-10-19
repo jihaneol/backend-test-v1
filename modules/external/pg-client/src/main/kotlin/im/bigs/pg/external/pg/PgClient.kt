@@ -21,7 +21,7 @@ import kotlin.jvm.java
 class PgClient(
     private val webClient: WebClient,
 ) : PgClientOutPort {
-    private val API_KEY = "11111111-1111-4111-8111-111111111112"
+    private val API_KEY = "11111111-1111-4111-8111-111111111111"
     private val IV = "AAAAAAAAAAAAAAAA"
 
     override fun supports(partnerId: Long): Boolean {
@@ -30,7 +30,7 @@ class PgClient(
 
     override fun approve(request: PgApproveRequest): PgApproveResult {
 
-        val enc = PgEnc.encryptToEnc(API_KEY, IV, toJson(testPgRequest(amount = request.amount)))
+        val enc = PgEnc.encryptToEnc(API_KEY, IV, toJson(TestPgRequest(amount = request.amount)))
 
         return webClient.post()
             .uri("/api/v1/pay/credit-card")
@@ -45,7 +45,7 @@ class PgClient(
             .block() ?: error("Could not retrieve approved card")
     }
 
-    private fun toJson(request: testPgRequest): String {
+    private fun toJson(request: TestPgRequest): String {
         val mapper = jacksonObjectMapper()
             .registerKotlinModule()
             .setSerializationInclusion(JsonInclude.Include.NON_NULL) // null 제외(옵션)
@@ -56,8 +56,8 @@ class PgClient(
 }
 
 /** PG 승인 요청 최소 정보. */
-data class testPgRequest(
-    val cardNumber: String = "1111-1111-1111-1112",
+data class TestPgRequest(
+    val cardNumber: String = "1111-1111-1111-1111",
     val birthDate: String = "19900101",
     val expiry: String = "1227",
     val password: Int = 12,

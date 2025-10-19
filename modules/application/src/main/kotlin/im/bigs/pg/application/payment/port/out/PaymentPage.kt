@@ -14,7 +14,7 @@ data class PaymentPage(
     val nextCursorCreatedAt: LocalDateTime?,
     val nextCursorId: Long?,
 ) {
-    fun toInstant(): Instant? {
+    fun toInstantUTC(): Instant? {
         return nextCursorCreatedAt?.toInstant(ZoneOffset.UTC)
     }
 }

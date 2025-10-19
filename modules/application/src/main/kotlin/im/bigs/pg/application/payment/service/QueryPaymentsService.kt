@@ -34,11 +34,12 @@ class QueryPaymentsService(
     override fun query(filter: QueryFilter): QueryResult {
 
         val (createdAt, cursorId) = decodeCursor(filter.cursor)
+        val status = PaymentStatus.fromOrNull(filter.status)
 
         val paymentPage = paymentOutPort.findBy(
             PaymentQuery(
                 partnerId = filter.partnerId,
-                status = PaymentStatus.fromOrNull(filter.status),
+                status = status,
                 from = filter.from,
                 to = filter.to,
                 limit = filter.limit,
@@ -50,7 +51,7 @@ class QueryPaymentsService(
         val summary = paymentOutPort.summary(
             PaymentSummaryFilter(
                 partnerId = filter.partnerId,
-                status = PaymentStatus.fromOrNull(filter.status),
+                status = status,
                 from = filter.from,
                 to = filter.to,
             )
@@ -58,8 +59,15 @@ class QueryPaymentsService(
 
         return QueryResult(
             items = paymentPage.items,
-            summary = PaymentSummary(count = summary.count, totalAmount = summary.totalAmount, totalNetAmount = summary.totalNetAmount),
-            nextCursor = if(paymentPage.hasNext) encodeCursor(paymentPage.toInstant(), paymentPage.nextCursorId) else null,
+            summary = PaymentSummary(
+                count = summary.count,
+                totalAmount = summary.totalAmount,
+                totalNetAmount = summary.totalNetAmount
+            ),
+            nextCursor = if (paymentPage.hasNext) encodeCursor(
+                paymentPage.toInstantUTC(),
+                paymentPage.nextCursorId
+            ) else null,
             hasNext = paymentPage.hasNext,
         )
     }

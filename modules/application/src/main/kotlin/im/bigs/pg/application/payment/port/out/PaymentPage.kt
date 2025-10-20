@@ -2,7 +2,9 @@ package im.bigs.pg.application.payment.port.out
 
 import com.fasterxml.jackson.annotation.JsonFormat
 import im.bigs.pg.domain.payment.Payment
+import java.time.Instant
 import java.time.LocalDateTime
+import java.time.ZoneOffset
 
 /** 페이지 결과. */
 data class PaymentPage(
@@ -11,4 +13,8 @@ data class PaymentPage(
     @get:JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     val nextCursorCreatedAt: LocalDateTime?,
     val nextCursorId: Long?,
-)
+) {
+    fun toInstantUTC(): Instant? {
+        return nextCursorCreatedAt?.toInstant(ZoneOffset.UTC)
+    }
+}

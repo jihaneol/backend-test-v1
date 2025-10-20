@@ -3,6 +3,7 @@ package im.bigs.pg.infra.persistence
 import im.bigs.pg.infra.persistence.config.JpaConfig
 import im.bigs.pg.infra.persistence.payment.entity.PaymentEntity
 import im.bigs.pg.infra.persistence.payment.repository.PaymentJpaRepository
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,9 +20,8 @@ import kotlin.test.assertTrue
 class 결제저장소커서페이징Test @Autowired constructor(
     val paymentRepo: PaymentJpaRepository,
 ) {
-    @Test
-    @DisplayName("커서 페이징과 통계가 일관되어야 한다")
-    fun `커서 페이징과 통계가 일관되어야 한다`() {
+    @BeforeEach
+    fun init() {
         val baseTs = Instant.parse("2024-01-01T00:00:00Z")
         repeat(35) { i ->
             paymentRepo.save(
@@ -41,7 +41,11 @@ class 결제저장소커서페이징Test @Autowired constructor(
                 ),
             )
         }
+    }
 
+    @Test
+    @DisplayName("커서 페이징과 통계가 일관되어야 한다")
+    fun `커서 페이징과 통계가 일관되어야 한다`() {
         val first = paymentRepo.pageBy(1L, "APPROVED", null, null, null, null, PageRequest.of(0, 21))
         assertEquals(21, first.size)
         val lastOfFirst = first[20]

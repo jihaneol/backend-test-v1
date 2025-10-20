@@ -2,6 +2,7 @@ package im.bigs.pg.api.exception
 
 import im.bigs.pg.common.exception.PgErrorBody
 import im.bigs.pg.common.exception.PgUnprocessed
+import org.apache.coyote.BadRequestException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
@@ -19,7 +20,9 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.body)
     }
 
-
+    @ExceptionHandler(BadRequestException::class)
+    fun handleBadRequest(ex: BadRequestException) =
+        ResponseEntity.badRequest().body(mapOf("message" to ex.message))
 
     @ExceptionHandler(IllegalStateException::class)
     fun handleIllegalState(ex: IllegalStateException): ProblemDetail {
@@ -37,5 +40,4 @@ class GlobalExceptionHandler {
         pd.detail = ex.message ?: "Unexpected error"
         return pd
     }
-
 }

@@ -7,6 +7,7 @@ import im.bigs.pg.api.payment.dto.CreatePaymentRequest
 import im.bigs.pg.api.payment.dto.PaymentResponse
 import im.bigs.pg.api.payment.dto.QueryResponse
 import im.bigs.pg.api.payment.dto.Summary
+import org.apache.coyote.BadRequestException
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -80,6 +81,7 @@ class PaymentController(
         @RequestParam(required = false) cursor: String?,
         @RequestParam(defaultValue = "20") limit: Int,
     ): ResponseEntity<QueryResponse> {
+        validateRange(from, to)
         val res = queryPaymentsUseCase.query(
             QueryFilter(partnerId, status, from, to, cursor, limit),
         )
@@ -91,5 +93,11 @@ class PaymentController(
                 hasNext = res.hasNext,
             ),
         )
+    }
+
+    private fun validateRange(from: LocalDateTime?, to: LocalDateTime?) {
+        if (from != null && to != null && !from.isBefore(to)) {
+            throw BadRequestException("`from` must be strictly before `to` (from < to).")
+        }
     }
 }

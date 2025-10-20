@@ -93,6 +93,22 @@ class PaymentControllerTest(
         paymentRepo.saveAll(listOf(p1, p2, p3, p4))
         paymentRepo.flush()
     }
+    @Test
+    @DisplayName("from to 경계 이상일때 400 반환")
+    fun whenFromNotBeforeTo_then400() {
+        val from = base
+        val to   =  base.minusSeconds(5)// 뒤집힘
+
+        mockMvc.get("/api/v1/payments") {
+            accept = MediaType.APPLICATION_JSON
+            param("partnerId", "1")
+            param("status", "APPROVED")
+            param("from", dtf.format(from))
+            param("to", dtf.format(to))
+        }.andExpect {
+            status { isBadRequest() }
+        }
+    }
 
     @Test
     @DisplayName("limit 3 조회 시 마지막 값 cursor 반환")

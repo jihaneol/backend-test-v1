@@ -57,7 +57,7 @@ class PaymentControllerTest(
             cardLast4 = "7890",
             approvalCode = "A12345",
             approvedAt = base.plusSeconds(2).toInstant(ZoneOffset.UTC),
-            status = PaymentStatus.APPROVED.name,          // enum 값 (예: APPROVED, FAILED, REFUNDED)
+            status = PaymentStatus.APPROVED.name, // enum 값 (예: APPROVED, FAILED, REFUNDED)
             createdAt = base.plusSeconds(2).toInstant(ZoneOffset.UTC),
             updatedAt = base.plusSeconds(2).toInstant(ZoneOffset.UTC),
         )
@@ -71,7 +71,7 @@ class PaymentControllerTest(
             cardLast4 = "7890",
             approvalCode = "A12345",
             approvedAt = base.plusSeconds(3).toInstant(ZoneOffset.UTC),
-            status = PaymentStatus.APPROVED.name,          // enum 값 (예: APPROVED, FAILED, REFUNDED)
+            status = PaymentStatus.APPROVED.name, // enum 값 (예: APPROVED, FAILED, REFUNDED)
             createdAt = base.plusSeconds(3).toInstant(ZoneOffset.UTC),
             updatedAt = base.plusSeconds(3).toInstant(ZoneOffset.UTC),
         )
@@ -85,7 +85,7 @@ class PaymentControllerTest(
             cardLast4 = "7890",
             approvalCode = "A12345",
             approvedAt = base.plusSeconds(4).toInstant(ZoneOffset.UTC),
-            status = PaymentStatus.APPROVED.name,          // enum 값 (예: APPROVED, FAILED, REFUNDED)
+            status = PaymentStatus.APPROVED.name, // enum 값 (예: APPROVED, FAILED, REFUNDED)
             createdAt = base.plusSeconds(4).toInstant(ZoneOffset.UTC),
             updatedAt = base.plusSeconds(4).toInstant(ZoneOffset.UTC),
         )
@@ -97,7 +97,7 @@ class PaymentControllerTest(
     @DisplayName("from to 경계 이상일때 400 반환")
     fun whenFromNotBeforeTo_then400() {
         val from = base
-        val to   =  base.minusSeconds(5)// 뒤집힘
+        val to = base.minusSeconds(5) // 뒤집힘
 
         mockMvc.get("/api/v1/payments") {
             accept = MediaType.APPLICATION_JSON
@@ -128,7 +128,7 @@ class PaymentControllerTest(
                 jsonPath("$.items.length()") { value(3) }
                 jsonPath("$.hasNext") { value(true) }
                 jsonPath("$.nextCursor") { exists() }
-                jsonPath("$.summary.count") { value(4) }          // 저장 총 건수
+                jsonPath("$.summary.count") { value(4) } // 저장 총 건수
                 jsonPath("$.summary.totalAmount") { value(40000) }
             }
             .andReturn()
@@ -149,7 +149,7 @@ class PaymentControllerTest(
     @DisplayName("마지막 커서 사용시 hasNext=false, cursor = null 반환")
     fun lastCursor_query_return() {
         // when & then
-         mockMvc.get("/api/v1/payments") {
+        mockMvc.get("/api/v1/payments") {
             accept = MediaType.APPLICATION_JSON
             param("partnerId", "1")
             param("status", "APPROVED")
@@ -163,9 +163,7 @@ class PaymentControllerTest(
                 content { contentTypeCompatibleWith(MediaType.APPLICATION_JSON) }
                 jsonPath("$.items.length()") { value(1) }
                 jsonPath("$.hasNext") { value(false) }
-                jsonPath("$.nextCursor") { doesNotExist()}
+                jsonPath("$.nextCursor") { doesNotExist() }
             }
-
     }
-
 }

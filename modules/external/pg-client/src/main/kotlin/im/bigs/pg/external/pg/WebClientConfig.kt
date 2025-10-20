@@ -34,7 +34,7 @@ class WebClientConfig {
             .baseUrl(BASE_URL) // 필요 시
             .clientConnector(ReactorClientHttpConnector(httpClient))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .filter(requestResponseLoggingFilter())   // 커스텀 로깅
+            .filter(requestResponseLoggingFilter()) // 커스텀 로깅
             .build()
     }
 
@@ -44,11 +44,11 @@ class WebClientConfig {
         ExchangeFilterFunction.ofRequestProcessor { req ->
             val masked = req.headers().toSingleValueMap()
                 .mapValues { (k, v) -> if (k.equals(HttpHeaders.AUTHORIZATION, true)) "***" else v }
-                log.debug(" {} {} headers={}", req.method(), req.url(), masked)
+            log.debug(" {} {} headers={}", req.method(), req.url(), masked)
             Mono.just(req)
         }.andThen(
             ExchangeFilterFunction.ofResponseProcessor { res ->
-                    log.debug(" status={} headers={}", res.statusCode(), res.headers().asHttpHeaders())
+                log.debug(" status={} headers={}", res.statusCode(), res.headers().asHttpHeaders())
                 Mono.just(res)
             }
         )

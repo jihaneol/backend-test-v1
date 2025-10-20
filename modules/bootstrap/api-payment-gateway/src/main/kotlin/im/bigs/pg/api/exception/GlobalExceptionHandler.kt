@@ -40,5 +40,4 @@ class GlobalExceptionHandler {
         pd.detail = ex.message ?: "Unexpected error"
         return pd
     }
-
 }

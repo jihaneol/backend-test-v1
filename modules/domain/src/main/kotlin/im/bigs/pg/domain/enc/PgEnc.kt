@@ -17,8 +17,8 @@ object PgEnc {
      * @param plaintextJson 평문 JSON
      */
     fun encryptToEnc(apiKey: String, ivBase64Url: String, plaintextJson: String): String {
-        val keyBytes = apiKeyToAesKeyBytes(apiKey)               // 32 bytes
-        val iv = b64UrlDecodeNoPad(ivBase64Url)                  // 12 bytes
+        val keyBytes = apiKeyToAesKeyBytes(apiKey) // 32 bytes
+        val iv = b64UrlDecodeNoPad(ivBase64Url) // 12 bytes
         require(iv.size == 12) { "IV must be 12 bytes for GCM" }
 
         val cipher = Cipher.getInstance("AES/GCM/NoPadding")

@@ -2,8 +2,8 @@ package im.bigs.pg.application.payment.service
 
 import im.bigs.pg.application.partner.port.out.FeePolicyOutPort
 import im.bigs.pg.application.partner.port.out.PartnerOutPort
-import im.bigs.pg.application.payment.port.`in`.PaymentUseCase
 import im.bigs.pg.application.payment.port.`in`.PaymentCommand
+import im.bigs.pg.application.payment.port.`in`.PaymentUseCase
 import im.bigs.pg.application.payment.port.out.PaymentOutPort
 import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
@@ -53,8 +53,7 @@ class PaymentService(
         val (curRate, curFee, curNet) = policy?.let { p ->
             val (fee, net) = FeeCalculator.calculateFee(command.amount, p.percentage, p.fixedFee)
             Triple(p.percentage, fee, net)
-         } ?: Triple(BigDecimal.ZERO, BigDecimal.ZERO, command.amount)
-
+        } ?: Triple(BigDecimal.ZERO, BigDecimal.ZERO, command.amount)
 
         val payment = Payment(
             partnerId = partner.id,

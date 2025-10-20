@@ -77,6 +77,8 @@ class 결제조회서비스Test {
     @Test
     @DisplayName("커서가 null 일때 -> decode는 null반환 한다.")
     fun cursorIsNull_decode_isNull() {
+
+        //given
         val filter = QueryFilter(
             partnerId = 1L,
             status = "APPROVED",
@@ -89,8 +91,10 @@ class 결제조회서비스Test {
         every { paymentRepo.findBy(any()) } returns page
         every { paymentRepo.summary(any()) } returns getSummary(page.items)
 
+        //when
         service.query(filter)
 
+        //then
         verify { paymentRepo.findBy(withArg {
             assertNull(it.cursorId)
             assertNull(it.cursorCreatedAt)
@@ -104,6 +108,8 @@ class 결제조회서비스Test {
     @Test
     @DisplayName("hasNext==true면 nextCursor encode를 적용한다.")
     fun hasNextIsTrue_nextCursor_encode() {
+
+        //given
         val filter = QueryFilter(
             partnerId = 1L,
             status = "APPROVED",
@@ -119,11 +125,13 @@ class 결제조회서비스Test {
         every { paymentRepo.findBy(any()) } returns page
         every { paymentRepo.summary(any()) } returns getSummary(page.items)
 
+        //when
         val res = service.query(filter)
 
         val decoded = String(Base64.getUrlDecoder().decode(res.nextCursor))
         val (millis, idStr) = decoded.split(":", limit = 2)
 
+        //then
         assertEquals(last.createdAt.toInstant(ZoneOffset.UTC).toEpochMilli(), millis.toLong())
         assertEquals(last.id, idStr.toLong())
 
@@ -133,6 +141,8 @@ class 결제조회서비스Test {
     @Test
     @DisplayName("hasNext=false면 nextCursor는 null이다")
     fun hasNextIsFalse_nextCursor_isNull() {
+
+        //given
         val filter = QueryFilter(
             partnerId = 1L,
             status = "APPROVED",
@@ -145,8 +155,10 @@ class 결제조회서비스Test {
         every { paymentRepo.findBy(any()) } returns page
         every { paymentRepo.summary(any()) } returns getSummary(page.items)
 
+        //when
         val res = service.query(filter)
 
+        //then
         assertFalse { res.hasNext }
         assertNull(res.nextCursor)
     }
@@ -155,6 +167,7 @@ class 결제조회서비스Test {
     @DisplayName("status가 잘못되면 PaymentQuery.status는 null로 응답된다")
     fun statusIsInvalid_status_isNull() {
 
+        //given
         val filter = QueryFilter(
             partnerId = 1L,
             status = "INVALID",
@@ -167,8 +180,10 @@ class 결제조회서비스Test {
         every { paymentRepo.findBy(any()) } returns page
         every { paymentRepo.summary(any()) } returns getSummary(page.items)
 
+        //when
         service.query(filter)
 
+        //then
         verify { paymentRepo.findBy(withArg {
             assertNull(it.status)
         }) }

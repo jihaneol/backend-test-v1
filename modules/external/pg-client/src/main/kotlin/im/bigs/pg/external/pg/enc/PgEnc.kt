@@ -1,4 +1,4 @@
-package im.bigs.pg.domain.enc
+package im.bigs.pg.external.pg.enc
 
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest

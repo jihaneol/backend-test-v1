@@ -1,6 +1,5 @@
-package im.bigs.pg.domain.calculation
+package im.bigs.pg.external.pg.enc
 
-import im.bigs.pg.external.pg.enc.PgEnc
 import kotlin.test.Test
 
 class 암호화Test {

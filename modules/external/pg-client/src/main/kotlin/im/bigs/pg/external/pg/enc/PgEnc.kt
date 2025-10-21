@@ -21,14 +21,7 @@ object PgEnc {
         val iv = b64UrlDecodeNoPad(ivBase64Url) // 12 bytes
         require(iv.size == 12) { "IV must be 12 bytes for GCM" }
 
-        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
-        cipher.init(
-            Cipher.ENCRYPT_MODE,
-            SecretKeySpec(keyBytes, "AES"),
-            GCMParameterSpec(GCM_TAG_LEN_BITS, iv)
-        )
-        val cipherTextWithTag = cipher.doFinal(plaintextJson.toByteArray(StandardCharsets.UTF_8))
-        return b64UrlEncodeNoPad(cipherTextWithTag)
+        return b64UrlEncodeNoPad(encryptAesGcm(keyBytes, iv, plaintextJson))
     }
 
     /** API-KEY(문자열) → SHA-256 → 32바이트 키 */
@@ -39,6 +32,17 @@ object PgEnc {
     /** Base64URL(무패딩) 디코딩 */
     private fun b64UrlDecodeNoPad(s: String): ByteArray =
         Base64.getUrlDecoder().decode(s)
+
+    /** AES-GCM으로 암호화 */
+    private fun encryptAesGcm(keyBytes: ByteArray, iv: ByteArray, plaintextJson: String): ByteArray {
+        val cipher = Cipher.getInstance("AES/GCM/NoPadding")
+        cipher.init(
+            Cipher.ENCRYPT_MODE,
+            SecretKeySpec(keyBytes, "AES"),
+            GCMParameterSpec(GCM_TAG_LEN_BITS, iv)
+        )
+        return cipher.doFinal(plaintextJson.toByteArray(StandardCharsets.UTF_8))
+    }
 
     /** Base64URL(무패딩) 인코딩 */
     private fun b64UrlEncodeNoPad(bytes: ByteArray): String =

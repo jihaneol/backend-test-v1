@@ -3,15 +3,12 @@ package im.bigs.pg.external.pg.config
 import io.netty.channel.ChannelOption
 import io.netty.handler.timeout.ReadTimeoutHandler
 import io.netty.handler.timeout.WriteTimeoutHandler
-import org.slf4j.LoggerFactory
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpHeaders
 import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
-import org.springframework.web.reactive.function.client.ExchangeFilterFunction
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.core.publisher.Mono
 import reactor.netty.http.client.HttpClient
 import java.time.Duration
 
@@ -19,7 +16,6 @@ import java.time.Duration
 class WebClientConfig(
     private val props: PgProperties
 ) {
-    private val log = LoggerFactory.getLogger(javaClass)
 
     @Bean
     fun paymentWebClient(): WebClient {
@@ -37,22 +33,7 @@ class WebClientConfig(
             .clientConnector(ReactorClientHttpConnector(httpClient))
             .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
             .defaultHeader("API-KEY", props.clients.apiKey)
-            .filter(requestResponseLoggingFilter()) // 커스텀 로깅
             .build()
     }
 
-    /** 민감헤더 마스킹 포함 요청/응답 로깅 */
-    @Bean
-    fun requestResponseLoggingFilter(): ExchangeFilterFunction =
-        ExchangeFilterFunction.ofRequestProcessor { req ->
-            val masked = req.headers().toSingleValueMap()
-                .mapValues { (k, v) -> if (k.equals(HttpHeaders.AUTHORIZATION, true)) "***" else v }
-            log.debug(" {} {} headers={}", req.method(), req.url(), masked)
-            Mono.just(req)
-        }.andThen(
-            ExchangeFilterFunction.ofResponseProcessor { res ->
-                log.debug(" status={} headers={}", res.statusCode(), res.headers().asHttpHeaders())
-                Mono.just(res)
-            }
-        )
 }

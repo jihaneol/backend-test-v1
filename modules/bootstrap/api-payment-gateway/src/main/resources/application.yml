@@ -23,9 +23,6 @@ server:
 logging:
   level:
     root: INFO
-    im.your.pkg: DEBUG
-    org.springframework.web: DEBUG
-    org.springframework.http: DEBUG
 
 pg:
   test:

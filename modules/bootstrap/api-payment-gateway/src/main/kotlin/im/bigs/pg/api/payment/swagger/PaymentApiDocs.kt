@@ -15,7 +15,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.Min
 import jakarta.validation.constraints.Positive
 import org.apache.coyote.BadRequestException
-import org.springframework.format.annotation.DateTimeFormat
+import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import java.time.LocalDateTime
 
@@ -40,7 +40,7 @@ interface PaymentApiDocs {
                 content = [
                     Content(
                         mediaType = "application/json",
-                        schema = Schema(implementation = BadRequestException::class)
+                        schema = Schema(implementation = ProblemDetail::class)
                     )
                 ]
             ), ApiResponse(
@@ -83,7 +83,7 @@ interface PaymentApiDocs {
                                 value = """
                                     {
                                         "code":1002,
-                                        "errorCode":"STOLEN_OR_LOST",
+                                        "errorCode":"INSUFFICIENT_LIMIT",
                                         "message":"한도가 초과되었습니다.",
                                         "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438",
                                     }

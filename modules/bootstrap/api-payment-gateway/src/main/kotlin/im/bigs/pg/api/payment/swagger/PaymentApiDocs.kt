@@ -69,58 +69,23 @@ interface PaymentApiDocs {
                         examples = [
                             ExampleObject(
                                 name = "STOLEN_OR_LOST", summary = "도난 또는 분실된 카드입니다.",
-                                value = """
-                                    {
-                                        "code":1001,
-                                        "errorCode":"STOLEN_OR_LOST",
-                                        "message":"도난 또는 분실된 카드입니다.",
-                                        "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438",
-                                    }
-                                """
+                                value = """ { "code":1001, "errorCode":"STOLEN_OR_LOST", "message":"도난 또는 분실된 카드입니다.", "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438", } """
                             ),
                             ExampleObject(
                                 name = "INSUFFICIENT_LIMIT", summary = "한도가 초과되었습니다.",
-                                value = """
-                                    {
-                                        "code":1002,
-                                        "errorCode":"INSUFFICIENT_LIMIT",
-                                        "message":"한도가 초과되었습니다.",
-                                        "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438",
-                                    }
-                                """
+                                value = """ { "code":1002, "errorCode":"INSUFFICIENT_LIMIT", "message":"한도가 초과되었습니다.", "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438", } """
                             ),
                             ExampleObject(
                                 name = "EXPIRED_OR_BLOCKED", summary = "정지되었거나 만료된 카드입니다.",
-                                value = """
-                                    {
-                                        "code":1003,
-                                        "errorCode":"EXPIRED_OR_BLOCKED",
-                                        "message":"정지되었거나 만료된 카드입니다.",
-                                        "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438",
-                                    }
-                                """
+                                value = """ { "code":1003, "errorCode":"EXPIRED_OR_BLOCKED", "message":"정지되었거나 만료된 카드입니다.", "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438", } """
                             ),
                             ExampleObject(
                                 name = "TAMPERED_CARD", summary = "위조 또는 변조된 카드입니다.",
-                                value = """
-                                    {
-                                        "code":1004,
-                                        "errorCode":"TAMPERED_CARD",
-                                        "message":"위조 또는 변조된 카드입니다.",
-                                        "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438",
-                                    }
-                                """
+                                value = """ { "code":1004, "errorCode":"TAMPERED_CARD", "message":"위조 또는 변조된 카드입니다.", "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438", } """
                             ),
                             ExampleObject(
                                 name = "TAMPERED_CARD", summary = "위조 또는 변조된 카드입니다. (허용되지 않은 카드)",
-                                value = """
-                                    {
-                                        "code":1005,
-                                        "errorCode":"TAMPERED_CARD",
-                                        "message":"위조 또는 변조된 카드입니다. (허용되지 않은 카드)",
-                                        "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438",
-                                    }
-                                """
+                                value = """ { "code":1005, "errorCode":"TAMPERED_CARD", "message":"위조 또는 변조된 카드입니다. (허용되지 않은 카드)", "referenceId":"b48c79bd-e1b3-416a-a583-efe90d1ee438", } """
                             ),
                         ]
                     )

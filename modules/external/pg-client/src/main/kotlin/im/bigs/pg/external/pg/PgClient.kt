@@ -10,6 +10,7 @@ import im.bigs.pg.application.pg.port.out.PgClientOutPort
 import im.bigs.pg.external.pg.exception.PgErrorBody
 import im.bigs.pg.external.pg.exception.PgUnprocessed
 import im.bigs.pg.domain.enc.PgEnc
+import im.bigs.pg.external.pg.config.PgProperties
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
@@ -18,10 +19,9 @@ import kotlin.jvm.java
 
 @Component
 class PgClient(
+    private val props: PgProperties,
     private val webClient: WebClient,
 ) : PgClientOutPort {
-    private val API_KEY = "11111111-1111-4111-8111-111111111111"
-    private val IV = "AAAAAAAAAAAAAAAA"
 
     override fun supports(partnerId: Long): Boolean {
         return true
@@ -29,11 +29,10 @@ class PgClient(
 
     override fun approve(request: PgApproveRequest): PgApproveResult {
 
-        val enc = PgEnc.encryptToEnc(API_KEY, IV, toJson(TestPgRequest(amount = request.amount)))
+        val enc = PgEnc.encryptToEnc(props.clients.apiKey, props.clients.iv, toJson(TestPgRequest(amount = request.amount)))
 
         return webClient.post()
             .uri("/api/v1/pay/credit-card")
-            .header("API-KEY", API_KEY)
             .bodyValue(mapOf("enc" to enc))
             .retrieve()
             .onStatus({ it.value() == 422 }) { res ->

@@ -1,7 +1,7 @@
 package im.bigs.pg.api.exception
 
-import im.bigs.pg.common.exception.PgErrorBody
-import im.bigs.pg.common.exception.PgUnprocessed
+import im.bigs.pg.external.pg.exception.PgErrorBody
+import im.bigs.pg.external.pg.exception.PgUnprocessed
 import org.apache.coyote.BadRequestException
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus

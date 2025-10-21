@@ -1,4 +1,4 @@
-package im.bigs.pg.common.exception
+package im.bigs.pg.external.pg.exception
 
 data class PgErrorBody(
     val code: Int,

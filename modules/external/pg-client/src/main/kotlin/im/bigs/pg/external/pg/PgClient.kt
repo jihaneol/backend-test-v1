@@ -7,8 +7,8 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import im.bigs.pg.application.pg.port.out.PgApproveRequest
 import im.bigs.pg.application.pg.port.out.PgApproveResult
 import im.bigs.pg.application.pg.port.out.PgClientOutPort
-import im.bigs.pg.common.exception.PgErrorBody
-import im.bigs.pg.common.exception.PgUnprocessed
+import im.bigs.pg.external.pg.exception.PgErrorBody
+import im.bigs.pg.external.pg.exception.PgUnprocessed
 import im.bigs.pg.domain.enc.PgEnc
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
